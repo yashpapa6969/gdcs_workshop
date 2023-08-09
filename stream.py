@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 import numpy as np
 import tensorflow as tf
 from PIL import Image
@@ -17,17 +16,18 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     image = image.resize((224, 224))
-    image_array = np.array(image)
-    image_array = image_array.astype('float32') / 255.0  # Normalize the image
+    image = np.array(image)
+    image = np.expand_dims(image, axis=0)
 
-    image_array = np.expand_dims(image_array, axis=0)
-
-    # Make a prediction using the loaded model
-    predictions = model.predict(image_array)
+    #
+    #     # Make a prediction using the loaded model
+    predictions = model.predict(image)
     rounded_predictions = np.round(predictions)
 
     st.image(image, caption="Uploaded Image", use_column_width=True)
     st.write("Prediction probabilities:", rounded_predictions.tolist())
-    class_labels = ["Class 0", "Class 1", ...]
-    predicted_label = class_labels[np.argmax(predictions)]
-    st.write("Predicted Label:", predicted_label)
+
+    # class_labels = ["Cat", "Dog"]  # Replace with your actual class labels
+    #
+    # predicted_label = class_labels[np.argmax(predictions)]
+    # st.write("Predicted Label:", predicted_label)
